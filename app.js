@@ -8,8 +8,8 @@ const PORT = process.env.PORT
 
 const filePaths = {
     '/': 'index.html',
-    'contact-me': 'contact-me.html',
-    '/about': 'about.html'
+    '/contact-me': 'public/contact-me.html',
+    '/about': 'public/about.html'
 }
 
 //middleware
@@ -17,12 +17,9 @@ app.use(express.static(path.join(__dirname)))
 
 //route handler
 app.get('*', (req, res) => {
-    const filePath = filePaths[req.url] || '404.html';
+    const filePath = filePaths[req.url] || 'public/404.html';
     res.sendFile(path.join(__dirname, filePath))
 })
-
-// Load environment variables
-
 
 // Server
 app.listen(PORT, () => {
