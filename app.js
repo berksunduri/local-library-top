@@ -1,25 +1,33 @@
-const express = require('express')
-const path = require('path')
-require('dotenv').config()
+const express = require('express');
+const path = require('path');
+const mongoose = require('mongoose');
+require('dotenv').config();
 
 const app = express();
 
-const PORT = process.env.PORT
+const PORT = process.env.PORT;
 
-const filePaths = {
-    '/': 'index.html',
-    '/contact-me': 'public/contact-me.html',
-    '/about': 'public/about.html'
+mongoose.set("strictQuery", false);
+
+const mongoDB = process.env.CON_STRING;
+
+app.set('view engine', 'ejs');
+app.set('views', './views');
+
+
+main().catch(err => console.log(err));
+async function main() {
+    await mongoose.connect(mongoDB);
+    console.log("Connected to MongoDB");
 }
 
-//middleware
-app.use(express.static(path.join(__dirname)))
+var indexRouter = require("./routes/index");
+var usersRouter = require("./routes/users");
+const catalogRouter = require("./routes/catalog"); //Import routes for "catalog" area of site
 
-//route handler
-app.get('*', (req, res) => {
-    const filePath = filePaths[req.url] || 'public/404.html';
-    res.sendFile(path.join(__dirname, filePath))
-})
+app.use("/", indexRouter);
+app.use("/users", usersRouter);
+app.use("/catalog", catalogRouter); // Add catalog routes to middleware chain.
 
 // Server
 app.listen(PORT, () => {

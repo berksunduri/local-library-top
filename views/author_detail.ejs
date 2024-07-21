@@ -1,0 +1,20 @@
+<%- include('layout') %>
+
+<h1><%= title %></h1>
+
+<p><strong>Name:</strong> <%= author.name %></p>
+<p><strong>Date of birth:</strong> <%= author.date_of_birth %></p>
+<p><strong>Date of death:</strong> <%= author.date_of_death %></p>
+
+<h2>Books by <%= author.name %></h2>
+<% if (author_books.length) { %>
+  <ul>
+    <% author_books.forEach(function(book) { %>
+      <li>
+        <a href="<%= book.url %>"><%= book.title %></a>: <%= book.summary %>
+      </li>
+    <% }); %>
+  </ul>
+<% } else { %>
+  <p>This author has no books.</p>
+<% } %>
